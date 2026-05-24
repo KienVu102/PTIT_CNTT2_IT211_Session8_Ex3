@@ -11,11 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-/**
- * Payment service handling all three payment operations.
- * NOTE: This service contains NO if-else logic for OTP or role checking.
- * All security cross-cutting concerns are handled by AOP Aspects.
- */
 @Service
 public class PaymentService {
 
@@ -25,9 +20,6 @@ public class PaymentService {
         this.transactionRepository = transactionRepository;
     }
 
-    /**
-     * Process a domestic payment. No special security annotation required.
-     */
     public Transaction processDomesticPayment(DomesticPaymentRequest request) {
         Transaction transaction = Transaction.builder()
                 .transactionCode("DOM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
@@ -39,10 +31,6 @@ public class PaymentService {
         return transactionRepository.save(transaction);
     }
 
-    /**
-     * Process an international payment.
-     * Annotated with @RequireOtp — the OTP verification is handled entirely by the Aspect.
-     */
     @RequireOtp
     public Transaction processInternationalPayment(InternationalPaymentRequest request) {
         Transaction transaction = Transaction.builder()
@@ -55,10 +43,6 @@ public class PaymentService {
         return transactionRepository.save(transaction);
     }
 
-    /**
-     * Process a refund.
-     * Annotated with @RequireManagerApproval — the role check is handled entirely by the Aspect.
-     */
     @RequireManagerApproval
     public Transaction processRefund(RefundRequest request) {
         Transaction transaction = Transaction.builder()

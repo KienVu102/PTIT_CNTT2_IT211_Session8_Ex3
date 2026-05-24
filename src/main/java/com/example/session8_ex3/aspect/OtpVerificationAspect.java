@@ -9,12 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-/**
- * Aspect that intercepts methods annotated with @RequireOtp.
- * Uses @annotation() pointcut (NOT execution()) for encapsulation and flexibility.
- *
- * Validates the OTP value from the "X-OTP" HTTP header against the default code.
- */
 @Aspect
 @Component
 public class OtpVerificationAspect {
@@ -23,7 +17,6 @@ public class OtpVerificationAspect {
 
     @Around("@annotation(requireOtp)")
     public Object verifyOtp(ProceedingJoinPoint joinPoint, RequireOtp requireOtp) throws Throwable {
-        // Retrieve the current HTTP request from the Spring context
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
@@ -38,7 +31,6 @@ public class OtpVerificationAspect {
             throw new SecurityException("OTP verification failed: Invalid or missing OTP. Transaction rejected.");
         }
 
-        // OTP is valid — proceed with the original method
         return joinPoint.proceed();
     }
 }

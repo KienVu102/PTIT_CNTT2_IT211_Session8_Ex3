@@ -11,11 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 public class RefundRequest {
 
-    /**
-     * Transaction code must match the pattern: alphanumeric characters only (e.g., TXN999).
-     * This @Pattern regex rejects SQL injection payloads like "TXN999' OR '1'='1"
-     * and XSS payloads containing special characters (<, >, ", ', ;, --, etc.).
-     */
     @NotNull(message = "Transaction code must not be null")
     @Pattern(
             regexp = "^[a-zA-Z0-9]+$",

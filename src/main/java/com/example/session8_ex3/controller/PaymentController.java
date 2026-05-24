@@ -21,10 +21,6 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    /**
-     * POST /api/payments/domestic
-     * Domestic payment — no special security headers required.
-     */
     @PostMapping("/domestic")
     public ResponseEntity<?> domesticPayment(@Valid @RequestBody DomesticPaymentRequest request) {
         Transaction transaction = paymentService.processDomesticPayment(request);
@@ -34,10 +30,6 @@ public class PaymentController {
         ));
     }
 
-    /**
-     * POST /api/payments/international
-     * International payment — requires X-OTP header (validated by AOP Aspect).
-     */
     @PostMapping("/international")
     public ResponseEntity<?> internationalPayment(@Valid @RequestBody InternationalPaymentRequest request) {
         Transaction transaction = paymentService.processInternationalPayment(request);
@@ -47,10 +39,7 @@ public class PaymentController {
         ));
     }
 
-    /**
-     * POST /api/payments/refund
-     * Refund — requires X-Role header with value "MANAGER" (validated by AOP Aspect).
-     */
+
     @PostMapping("/refund")
     public ResponseEntity<?> refundPayment(@Valid @RequestBody RefundRequest request) {
         Transaction transaction = paymentService.processRefund(request);

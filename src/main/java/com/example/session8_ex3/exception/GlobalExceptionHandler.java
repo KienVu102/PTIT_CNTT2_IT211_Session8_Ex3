@@ -11,17 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Global exception handler for the Payment Gateway.
- * Catches validation errors, security exceptions, and generic errors.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Handles @Valid validation failures (e.g., @Pattern on transactionCode).
-     * This is where SQL injection / XSS attempts on transactionCode are caught.
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
@@ -37,9 +29,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-    /**
-     * Handles SecurityException thrown by AOP Aspects (OTP / Manager approval failures).
-     */
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<?> handleSecurityException(SecurityException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
@@ -51,9 +40,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 
-    /**
-     * Catches any unhandled exceptions.
-     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGenericException(Exception ex) {
         Map<String, Object> body = new LinkedHashMap<>();

@@ -9,12 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-/**
- * Aspect that intercepts methods annotated with @RequireManagerApproval.
- * Uses @annotation() pointcut (NOT execution()) for encapsulation and flexibility.
- *
- * Validates the role from the "X-Role" HTTP header — only "MANAGER" is allowed.
- */
 @Aspect
 @Component
 public class ManagerApprovalAspect {
@@ -22,7 +16,6 @@ public class ManagerApprovalAspect {
     @Around("@annotation(requireManagerApproval)")
     public Object verifyManagerRole(ProceedingJoinPoint joinPoint,
                                     RequireManagerApproval requireManagerApproval) throws Throwable {
-        // Retrieve the current HTTP request from the Spring context
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
@@ -38,7 +31,6 @@ public class ManagerApprovalAspect {
                     "Security Error: Access denied. Only users with MANAGER role can process refunds.");
         }
 
-        // Role is valid — proceed with the original method
         return joinPoint.proceed();
     }
 }
